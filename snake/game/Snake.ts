@@ -57,8 +57,6 @@ export default class Snake {
       const cord = this._trail.get(i);
       if (!cord && cord !== 0) throw new Error("Snake trail is insufficient (missing elements)");
 
-      console.log(cord);
-
       const [tailX, tailY] = this.game.grid.getCordPosition(cord);
       context.fillRect(tailX + padding, tailY + padding, width, height);
     }

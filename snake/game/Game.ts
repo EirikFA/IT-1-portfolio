@@ -25,10 +25,10 @@ export default class Game {
     if (height % 2 === 0 || width % 2 === 0) throw new Error("Height and width must be odd numbers");
 
     this.context = context;
+    this.foodLocation = 5;
     this.grid = new Grid(height, width, 35);
     this.snake = new Snake(this, 0, 25);
     this._started = false;
-    this.foodLocation = 5;
     document.addEventListener("keydown", e => this.handleKey(e));
   }
 
@@ -92,7 +92,11 @@ export default class Game {
 
     if (!this.foodLocation) this.generateFood();
     this.draw();
-    setTimeout(() => requestAnimationFrame(this.play.bind(this)), 350);
+    
+    let interval = -11 * this.snake.tailLength + 350;
+    if (interval < 40) interval = 40;
+
+    setTimeout(() => requestAnimationFrame(this.play.bind(this)), interval);
   }
 
   private handleKey (e: KeyboardEvent): void {

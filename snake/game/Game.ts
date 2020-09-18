@@ -79,7 +79,7 @@ export default class Game {
     this.snake.move();
     this.currentFrameDirection = this.snake.direction;
 
-    if (this.detectEdgeCollision(prevCord, this.snake.coordinate) || this.detectSnakeCollision(this.snake.coordinate)) {
+    if (prevCord !== this.snake.coordinate && (this.detectEdgeCollision(prevCord, this.snake.coordinate) || this.detectSnakeCollision(this.snake.coordinate))) {
       this.stop();
       alert("Game over");
       return;
@@ -94,7 +94,8 @@ export default class Game {
     this.draw();
     
     let interval = -11 * this.snake.tailLength + 350;
-    if (interval < 40) interval = 40;
+    if (interval < 120) interval = 120;
+    interval = 150;
 
     setTimeout(() => requestAnimationFrame(this.play.bind(this)), interval);
   }

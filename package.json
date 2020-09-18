@@ -9,10 +9,12 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/plugin-transform-typescript": "^7.11.0",
+    "@types/p5": "^0.9.1",
     "parcel": "^2.0.0-beta.1"
   },
   "dependencies": {
     "immutable": "^4.0.0-rc.12",
-    "phaser": "^3.24.1"
+    "p5": "^1.1.9",
+    "typescript": "^4.0.2"
   }
 }

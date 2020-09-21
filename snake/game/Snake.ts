@@ -13,8 +13,6 @@ export default class Snake {
   public get coordinate (): number {
     return this._coordinate;
   }
-
-  private cordOffset: number;
   
   private _direction: Direction;
   public get direction (): Direction {
@@ -37,7 +35,6 @@ export default class Snake {
 
   public constructor (game: Game, initialPosition: number, size: number) {
     this._coordinate = initialPosition;
-    this.cordOffset = 0;
     this._direction = Direction.Right;
     this.game = game;
     this.size = size;
@@ -74,7 +71,6 @@ export default class Snake {
         headStartAngl = 3/2 * Math.PI;
         headEndAngl = 1/2 * Math.PI;
         headX -= (this.game.grid.squareSize / 3);
-        headX += (this.cordOffset * this.game.grid.squareSize);
         break;
 
       case Direction.Left:
@@ -93,11 +89,8 @@ export default class Snake {
       let cord = this._trail.get(i);
       if (!cord && cord !== 0) throw new Error("Snake trail is insufficient (missing elements)");
 
-      if (this.cordOffset !== 0) cord -= 1;
-
       const [tailX, tailY] = this.game.grid.getCordPosition(cord);
-      console.log(tailX, this.cordOffset * this.game.grid.squareSize)
-      context.fillRect(tailX + padding + (this.cordOffset * this.game.grid.squareSize), tailY + padding, width, height);
+      context.fillRect(tailX + padding, tailY + padding, width, height);
     }
 
     context.closePath();
@@ -120,20 +113,11 @@ export default class Snake {
         break;
 
       case Direction.Left:
-        this.cordOffset += 0.1;
-        if (this.cordOffset === 1) {
-          cord -= 1;
-          this.cordOffset = 0;
-        }
+        cord -= 1;
         break;
       
       case Direction.Right:
-        this.cordOffset += 0.2;
-        this.cordOffset = Math.round(this.cordOffset * 10) / 10;
-        if (this.cordOffset === 1) {
-          cord += 1;
-          this.cordOffset = 0;
-        }
+        cord += 1;
         break;
     }
 

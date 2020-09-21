@@ -95,7 +95,6 @@ export default class Game {
     
     let interval = -11 * this.snake.tailLength + 350;
     if (interval < 120) interval = 120;
-    interval = 150;
 
     setTimeout(() => requestAnimationFrame(this.play.bind(this)), interval);
   }

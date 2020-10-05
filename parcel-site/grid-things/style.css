@@ -1,0 +1,23 @@
+body {
+  margin: 0;
+}
+
+.grid-container {
+  display: grid;
+  height: 416px;
+  width: 572px;
+  grid-template-columns: 6fr 1fr 2fr 1fr 12fr;
+  grid-template-rows: 6fr 1fr 2fr 1fr 6fr;
+}
+
+.red {
+  background-color: #BA122B;
+}
+
+.white {
+  background-color: #FFFFFF;
+}
+
+.blue {
+  background-color: #00205B;
+}

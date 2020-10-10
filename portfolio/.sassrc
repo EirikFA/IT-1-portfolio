@@ -1,0 +1,4 @@
+{
+  "data": "@import \"src/assets/variables\";",
+  "includePaths": ["node_modules"]
+}

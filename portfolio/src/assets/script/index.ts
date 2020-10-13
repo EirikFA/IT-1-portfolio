@@ -1,14 +1,17 @@
 import { firestore } from "firebase/app";
-import { ProjectData } from "types";
 
 import { auth, db } from "../../fb";
+import { ProjectData } from "../../types";
 import { renderCard } from "./projects";
 
 const newButton = document.getElementById("new-project-button");
 
-auth.onAuthStateChanged(user => {
+auth.onAuthStateChanged(async user => {
   if (user && newButton) {
-    newButton.style.display = "block";
+    const tokenResult = await user.getIdTokenResult();
+    if (tokenResult.claims.editor === true) {
+      newButton.style.display = "block";
+    }
   } else if (newButton) {
     newButton.style.display = "none";
   }

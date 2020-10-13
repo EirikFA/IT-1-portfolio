@@ -26,8 +26,7 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "baseUrl": "./src"
+    "resolveJsonModule": true
   },
   "include": [
     "src/**/*"

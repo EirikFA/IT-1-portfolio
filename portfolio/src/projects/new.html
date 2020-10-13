@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New project</title>
+
+  <link rel="stylesheet" href="../assets/style/projects/new.scss">
+</head>
+
+<body>
+  <div id="nav-container"></div>
+
+  <section class="section columns p-4">
+    <div id="sidebar-container" class="column is-2"></div>
+
+    <div class="column is-centered">
+      <div id="loader">Loading..</div>
+
+      <form id="new-project-form" name="new-project" class="is-hidden">
+        <div class="columns">
+          <div class="field column is-4">
+            <label for="name" class="label">Name</label>
+            <div class="control">
+              <input name="name" type="text" class="input">
+            </div>
+          </div>
+        </div>
+
+        <div class="field content">
+          <div id="pell-container" class="pell-editor"></div>
+        </div>
+
+        <div class="field">
+          <div class="control">
+            <button class="button is-link">Create project</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <div id="footer-container"></div>
+
+  <script src="../template/loader.ts"></script>
+  <script src="../assets/script/projects/new.ts"></script>
+</body>
+
+</html>

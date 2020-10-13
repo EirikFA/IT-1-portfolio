@@ -1,11 +1,14 @@
 /* eslint-disable import/no-duplicates */
 // Firebase imports triggers rule
 
-import { auth as fbAuth, firestore, initializeApp } from "firebase/app";
+import {
+  auth as fbAuth, storage as fbStorage, firestore, initializeApp
+} from "firebase/app";
 import { auth as uiAuth } from "firebaseui";
 
 import "firebase/auth";
 import "firebase/firestore";
+import "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA3keAOlA6o4557RdsL_bt5wgL0Pa-1k8I",
@@ -21,4 +24,5 @@ export const app = initializeApp(firebaseConfig);
 
 export const auth = fbAuth();
 export const db = firestore();
+export const storage = fbStorage();
 export const ui = new uiAuth.AuthUI(auth);

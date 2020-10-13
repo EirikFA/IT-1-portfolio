@@ -1,19 +1,27 @@
-import { db } from "../../fb";
+import { firestore } from "firebase/app";
+import { ProjectData } from "types";
+
+import { auth, db } from "../../fb";
+import { renderCard } from "./projects";
+
+const newButton = document.getElementById("new-project-button");
+
+auth.onAuthStateChanged(user => {
+  if (user && newButton) {
+    newButton.style.display = "block";
+  } else if (newButton) {
+    newButton.style.display = "none";
+  }
+});
 
 const container = document.getElementById("projects");
 
 if (container) {
-  const projects = db.collectionGroup("projects");
+  const projects = db.collectionGroup("projects") as firestore.Query<ProjectData>;
   projects.onSnapshot(snapshot => {
     snapshot.docChanges().forEach(change => {
       if (change.type === "added") {
-        const { name } = change.doc.data();
-
-        const card = document.createElement("div");
-        card.id = `project-${change.doc.id}`;
-        card.className = "project-card column is-3";
-        card.textContent = name;
-
+        const card = renderCard(change.doc);
         container.appendChild(card);
       } else if (change.type === "removed") {
         const card = document.getElementById(`project-${change.doc.id}`);

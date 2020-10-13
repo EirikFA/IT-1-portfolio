@@ -7,6 +7,7 @@
   <title>Portfolio | Projects</title>
 
   <link rel="stylesheet" href="./assets/style/index.scss">
+  <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css">
 </head>
 
 <body>
@@ -15,13 +16,25 @@
   <section class="section columns p-4">
     <div id="sidebar-container" class="column is-2"></div>
 
-    <div id="projects" class="column columns is-multiline"></div>
+    <div class="column">
+      <div id="new-project-button" class="block">
+        <button class="button is-info is-rounded">
+          <span>New project</span>
+          <span class="icon">
+            <i class="fas fa-plus"></i>
+          </span>
+        </button>
+      </div>
+
+      <div id="projects" class="columns is-multiline"></div>
+    </div>
   </section>
 
   <div id="footer-container"></div>
 
   <script src="./template/loader.ts"></script>
   <script src="./assets/script/index.ts"></script>
+  <script src="../node_modules/@fortawesome/fontawesome-free/js/all.js"></script>
 </body>
 
 </html>

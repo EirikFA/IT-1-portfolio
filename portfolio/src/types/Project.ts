@@ -1,4 +1,4 @@
 export interface ProjectData {
-  name: string;
   content: string;
+  name: string;
 }

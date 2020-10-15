@@ -1,8 +1,5 @@
-import { firestore } from "firebase/app";
-
 import { auth, db } from "../../fb";
-import { ProjectData } from "../../types";
-import { renderCard } from "./projects";
+import { ProjectManager } from "./projects/ProjectManager";
 
 const newButton = document.getElementById("new-project-button");
 
@@ -20,16 +17,9 @@ auth.onAuthStateChanged(async user => {
 const container = document.getElementById("projects");
 
 if (container) {
-  const projects = db.collectionGroup("projects") as firestore.Query<ProjectData>;
-  projects.onSnapshot(snapshot => {
-    snapshot.docChanges().forEach(change => {
-      if (change.type === "added") {
-        const card = renderCard(change.doc);
-        container.appendChild(card);
-      } else if (change.type === "removed") {
-        const card = document.getElementById(`project-${change.doc.id}`);
-        if (card) card.remove();
-      }
-    });
-  });
+  const manager = new ProjectManager(db);
+
+  manager.on("new-project", project => project.renderCard(container));
+  manager.on("removed-project", project => project.removeCard());
+  manager.listen();
 }

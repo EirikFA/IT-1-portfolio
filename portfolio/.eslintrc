@@ -128,7 +128,7 @@
       "error",
       "never"
     ],
-    "space-before-function-paren": [
+    "@typescript-eslint/space-before-function-paren": [
       "error",
       "always"
     ],

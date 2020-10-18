@@ -14,12 +14,13 @@ export class ProjectManager extends CustomEmitter {
 
   private projectCollection: firestore.Query<ProjectData>;
 
-  private readonly projects: Project[] = [];
+  private readonly projects: Project[];
 
   public constructor (db: firestore.Firestore) {
     super();
     this.db = db;
     this.projectCollection = this.db.collectionGroup("projects") as firestore.Query<ProjectData>;
+    this.projects = [];
   }
 
   public listen (): void {

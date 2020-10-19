@@ -32,7 +32,7 @@ export class ProjectManager extends CustomEmitter {
       if (change.type === "added") {
         const data = change.doc.data();
 
-        const project = new Project(data.content, change.doc.id, data.name);
+        const project = new Project(change.doc.id, data.content, data.coverImage, data.description, data.name, data.url);
         this.projects.push(project);
         this.emit("new-project", project);
       } else if (change.type === "removed") {

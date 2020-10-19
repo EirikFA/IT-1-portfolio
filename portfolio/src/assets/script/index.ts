@@ -19,7 +19,13 @@ const container = document.getElementById("projects");
 if (container) {
   const manager = new ProjectManager(db);
 
-  manager.on("new-project", project => project.renderCard(container));
+  manager.on("new-project", project => {
+    const cardContainer = document.createElement("div");
+    cardContainer.className = "column is-4";
+    container.appendChild(cardContainer);
+
+    project.renderCard(cardContainer);
+  });
   manager.on("removed-project", project => project.removeCard());
   manager.listen();
 }

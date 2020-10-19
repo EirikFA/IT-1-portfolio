@@ -6,7 +6,10 @@ export default class ValidationError extends Error {
   constructor (code: ValidationErrorCode, ...params: ConstructorParameters<typeof Error>) {
     super(...params);
 
-    Error.captureStackTrace(this, ValidationError);
+    // Only available in V8
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, ValidationError);
+    }
 
     this.name = "ValidationError";
     this.code = code;

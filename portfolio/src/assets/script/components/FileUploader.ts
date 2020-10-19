@@ -29,12 +29,16 @@ export default class FileUploader {
     this.inputEl.removeEventListener("change", this.handleFileChange.bind(this));
   }
 
-  public upload (ref: storage.Reference): storage.UploadTask {
+  public upload (ref: storage.Reference | ((file: File) => storage.Reference)): storage.UploadTask {
     if (!this.currentFile) throw new ValidationError("NoValue");
 
     // If uploader should validate field type and the type is wrong, throw error
     if (this.fileType && !this.currentFile.type.startsWith(this.fileType)) {
       throw new ValidationError("InvalidFileFormat");
+    }
+
+    if (typeof ref === "function") {
+      return ref(this.currentFile).put(this.currentFile);
     }
 
     return ref.put(this.currentFile);

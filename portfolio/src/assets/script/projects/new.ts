@@ -140,6 +140,7 @@ auth.onAuthStateChanged(async user => {
 
         await projectRef.set({
           ...state,
+          id: projectRef.id,
           content: editor.content
         });
 

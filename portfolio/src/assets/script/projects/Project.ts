@@ -87,6 +87,38 @@ export default class Project {
     container.appendChild(this.createCard(`project-${this.id}`));
   }
 
+  public renderContent (container: HTMLElement): void {
+    const title = document.createElement("h3");
+    title.className = "title is-3";
+    title.textContent = this.name;
+    container.appendChild(title);
+
+    const subtitle = document.createElement("h6");
+    subtitle.className = "subtitle is-6";
+    container.appendChild(subtitle);
+
+    const subtitleAnchor = document.createElement("a");
+    subtitleAnchor.href = this.url;
+    subtitleAnchor.textContent = this.url;
+    subtitleAnchor.target = "_blank";
+    subtitleAnchor.rel = "noopener noreferrer";
+    subtitle.appendChild(subtitleAnchor);
+
+    const contentColumns = document.createElement("div");
+    contentColumns.className = "columns";
+    container.appendChild(contentColumns);
+
+    const content = document.createElement("div");
+    content.className = "content column is-8";
+    content.innerHTML = this.content;
+    contentColumns.appendChild(content);
+
+    const side = document.createElement("side");
+    side.className = "column is-offset-1 is-2 box";
+    side.textContent = "Metadata here?";
+    contentColumns.appendChild(side);
+  }
+
   private getPermURL (): string {
     return `/projects/project.html?id=${this.id}`;
   }

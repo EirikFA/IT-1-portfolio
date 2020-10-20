@@ -27,14 +27,30 @@ export class ProjectManager extends CustomEmitter {
     this.projectCollection.onSnapshot(this.snapshotHandler.bind(this));
   }
 
+  public async load (id: string): Promise<Project> {
+    const snapshot = await this.projectCollection.where("id", "==", id).get();
+
+    const doc = snapshot.docs[0];
+    const data = doc.data();
+    const project = new Project(doc.id, data.content, data.coverImage, data.description, data.name, data.url);
+    this.projects.push(project);
+
+    return project;
+  }
+
   private snapshotHandler (snapshot: firestore.QuerySnapshot<ProjectData>) {
     snapshot.docChanges().forEach(change => {
       if (change.type === "added") {
-        const data = change.doc.data();
+        // Project may already have been loaded by `ProjectManager.load`
+        const existing = this.projects.find(p => p.id === change.doc.id);
+        if (!existing) {
+          const data = change.doc.data();
 
-        const project = new Project(change.doc.id, data.content, data.coverImage, data.description, data.name, data.url);
-        this.projects.push(project);
-        this.emit("new-project", project);
+          const project = new Project(change.doc.id, data.content, data.coverImage, data.description, data.name, data.url);
+
+          this.projects.push(project);
+          this.emit("new-project", project);
+        }
       } else if (change.type === "removed") {
         const index = this.projects.findIndex(p => p.id === change.doc.id);
         if (index >= 0) {

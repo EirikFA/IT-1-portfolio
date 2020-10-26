@@ -22,12 +22,8 @@ const coverImageName = document.querySelector("#cover-image-field .file-name");
 const coverImageError = document.querySelector("#cover-image-field p.help.is-danger");
 const submitButton = document.getElementById("new-project-submit-btn");
 const loader = document.getElementById("loader");
-const uploadModal = document.getElementById("image-upload-modal");
-const modalClose = document.getElementById("upload-modal-close");
 
 let projectRef: firestore.DocumentReference;
-
-modalClose?.addEventListener("click", () => uploadModal?.classList.remove("is-active"));
 
 // Helper function
 const toggleSubmitting = () => {

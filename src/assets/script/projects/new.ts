@@ -1,8 +1,19 @@
 import { storage as fbStorage, firestore } from "firebase";
+import { readFileSync } from "fs";
+import tinymce from "tinymce";
+
+import "tinymce/icons/default";
+import "tinymce/plugins/autoresize";
+import "tinymce/skins/ui/oxide/skin.css";
+import "tinymce/themes/silver";
 
 import { auth, db, storage } from "../../../fb";
 import { ProjectData } from "../../../types";
-import { FileUploader, PellEditor } from "../components";
+import { FileUploader } from "../components";
+
+// https://github.com/tinymce/tinymce/issues/2836#issuecomment-544790987
+const contentStyle = readFileSync("node_modules/tinymce/skins/content/default/content.css", "utf8");
+const contentStyle2 = readFileSync("node_modules/tinymce/skins/ui/oxide/content.css", "utf8");
 
 // Elements
 const form = document.getElementById("new-project-form");
@@ -11,13 +22,8 @@ const coverImageName = document.querySelector("#cover-image-field .file-name");
 const coverImageError = document.querySelector("#cover-image-field p.help.is-danger");
 const submitButton = document.getElementById("new-project-submit-btn");
 const loader = document.getElementById("loader");
-const pellContainer = document.getElementById("pell-container");
 const uploadModal = document.getElementById("image-upload-modal");
 const modalClose = document.getElementById("upload-modal-close");
-const bodyImageInput = document.querySelector("#image-upload-modal input[type=file]");
-const bodyImageName = document.querySelector("#image-upload-modal .file-name");
-const bodyImageError = document.querySelector("#image-upload-modal p.help.is-danger");
-const bodyImageSubmit = document.getElementById("upload-modal-submit");
 
 let projectRef: firestore.DocumentReference;
 
@@ -39,59 +45,20 @@ auth.onAuthStateChanged(async user => {
 
   if (form) form.classList.remove("is-hidden");
   if (loader) loader.classList.add("is-hidden");
-  if (coverImageInput && coverImageInput instanceof HTMLInputElement && coverImageName && pellContainer) {
+  if (coverImageInput && coverImageInput instanceof HTMLInputElement && coverImageName) {
     // Get a reference (automatic ID) to use for uploading images before creating the project
     projectRef = db.collection(`users/${user.uid}/projects`).doc();
 
-    const editor = new PellEditor(pellContainer);
-    editor.load([
-      {
-        name: "image",
-        result: () => {
-          if (
-            uploadModal
-            && bodyImageInput
-            && bodyImageInput instanceof HTMLInputElement
-            && bodyImageName
-            && bodyImageError
-            && bodyImageSubmit
-          ) {
-            uploadModal.classList.add("is-active");
-            const uploader = new FileUploader(bodyImageInput, bodyImageName, "image");
-
-            let submitting = false;
-
-            const handleFileSubmit = async (): Promise<void> => {
-              if (submitting || !uploader.currentFile) return;
-              submitting = true;
-
-              const ref = storage.ref(`${projectRef.path}/images/${uploader.currentFile.name}`);
-              try {
-                await uploader.upload(ref).then(async () => {
-                  const url = await ref.getDownloadURL();
-                  editor.exec("insertImage", url);
-
-                  uploadModal.classList.remove("is-active");
-                  bodyImageSubmit.removeEventListener("click", handleFileSubmit);
-                  uploader.clean();
-                  bodyImageName.textContent = "Image file";
-                });
-              } catch (e) {
-                submitting = false;
-                if (e instanceof Error && e.name === "ValidationError") {
-                  bodyImageError.textContent = "File is not an image";
-                } else {
-                  bodyImageError.textContent = "Error occurred";
-                  console.error(e);
-                }
-              }
-            };
-
-            bodyImageSubmit.addEventListener("click", handleFileSubmit);
-          }
-        }
-      }
-    ]);
+    tinymce.init({
+      selector: "#tinymce-editor",
+      plugins: ["autoresize"],
+      min_height: 300,
+      max_height: 900,
+      // https://github.com/tinymce/tinymce/issues/2836#issuecomment-544790987
+      skin: false,
+      content_css: false,
+      content_style: `${contentStyle}\n${contentStyle2}`
+    });
 
     const coverImageUploader = new FileUploader(coverImageInput, coverImageName, "image");
 
@@ -140,8 +107,7 @@ auth.onAuthStateChanged(async user => {
 
         await projectRef.set({
           ...state,
-          id: projectRef.id,
-          content: editor.content
+          id: projectRef.id
         });
 
         location.replace("/");

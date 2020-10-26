@@ -109,12 +109,12 @@ export default class Project {
     container.appendChild(contentColumns);
 
     const content = document.createElement("div");
-    content.className = "content column is-8";
+    content.className = "content column is-10";
     content.innerHTML = this.content;
     contentColumns.appendChild(content);
 
     const side = document.createElement("side");
-    side.className = "column is-offset-1 is-2 box";
+    side.className = "column is-2 box";
     side.textContent = "Metadata here?";
     contentColumns.appendChild(side);
   }

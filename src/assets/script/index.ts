@@ -1,5 +1,6 @@
 import { auth, db } from "../../fb";
 import { ProjectManager } from "./projects/ProjectManager";
+import TagManager from "./tags/TagManager";
 
 const newButton = document.getElementById("new-project-button");
 
@@ -17,7 +18,9 @@ auth.onAuthStateChanged(async user => {
 const container = document.getElementById("projects");
 
 if (container) {
-  const manager = new ProjectManager(db);
+  const tagManager = new TagManager(db);
+  // TODO: Load all tags on page load (for filtering)
+  const manager = new ProjectManager(db, tagManager);
 
   manager.on("new-project", project => {
     const cardContainer = document.createElement("div");

@@ -1,22 +1,27 @@
+import Tag from "../tags/Tag";
+
 export default class Project {
   public readonly id: string;
 
   private readonly content: string;
 
-  private readonly coverImage: string;
+  private readonly cover: string;
 
   private readonly description: string;
 
   private readonly name: string;
 
+  private readonly tags: Tag[];
+
   private readonly url: string;
 
-  public constructor (id: string, content: string, coverImage: string, description: string, name: string, url: string) {
+  public constructor (id: string, content: string, cover: string, description: string, name: string, tags: Tag[], url: string) {
     this.id = id;
     this.content = content;
-    this.coverImage = coverImage;
+    this.cover = cover;
     this.description = description;
     this.name = name;
+    this.tags = tags;
     this.url = url;
   }
 
@@ -39,7 +44,7 @@ export default class Project {
     figure.appendChild(imageAnchor);
 
     const img = document.createElement("img");
-    img.src = this.coverImage;
+    img.src = this.cover;
     imageAnchor.appendChild(img);
 
     // Content
@@ -115,7 +120,18 @@ export default class Project {
 
     const side = document.createElement("side");
     side.className = "column is-2 box";
-    side.textContent = "Metadata here?";
+
+    const tagsContainer = document.createElement("div");
+    tagsContainer.className = "tags";
+    this.tags.forEach(t => {
+      const tagEl = document.createElement("span");
+      tagEl.className = "tag is-medium";
+      tagEl.textContent = t.name;
+      tagsContainer.appendChild(tagEl);
+    });
+
+    side.appendChild(tagsContainer);
+
     contentColumns.appendChild(side);
   }
 

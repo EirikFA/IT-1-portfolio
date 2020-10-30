@@ -2,6 +2,7 @@ import { firestore } from "firebase/app";
 
 import { ProjectData } from "../../../types";
 import CustomEmitter from "../../../util/CustomEmitter";
+import TagManager from "../tags/TagManager";
 import Project from "./Project";
 
 export declare interface ProjectManager {
@@ -14,13 +15,16 @@ export class ProjectManager extends CustomEmitter {
 
   private projectCollection: firestore.Query<ProjectData>;
 
-  private readonly projects: Project[];
+  private projects: Project[];
 
-  public constructor (db: firestore.Firestore) {
+  private readonly tagManager: TagManager;
+
+  public constructor (db: firestore.Firestore, tagManager: TagManager) {
     super();
     this.db = db;
     this.projectCollection = this.db.collectionGroup("projects") as firestore.Query<ProjectData>;
     this.projects = [];
+    this.tagManager = tagManager;
   }
 
   public listen (): void {
@@ -32,21 +36,23 @@ export class ProjectManager extends CustomEmitter {
 
     const doc = snapshot.docs[0];
     const data = doc.data();
-    const project = new Project(doc.id, data.content, data.coverImage, data.description, data.name, data.url);
+    const tags = await this.tagManager.getMultiple(data.tags);
+    const project = new Project(doc.id, data.content, data.cover, data.description, data.name, tags, data.url);
     this.projects.push(project);
 
     return project;
   }
 
   private snapshotHandler (snapshot: firestore.QuerySnapshot<ProjectData>) {
-    snapshot.docChanges().forEach(change => {
+    snapshot.docChanges().forEach(async change => {
       if (change.type === "added") {
         // Project may already have been loaded by `ProjectManager.load`
         const existing = this.projects.find(p => p.id === change.doc.id);
         if (!existing) {
           const data = change.doc.data();
+          const tags = await this.tagManager.getMultiple(data.tags);
 
-          const project = new Project(change.doc.id, data.content, data.coverImage, data.description, data.name, data.url);
+          const project = new Project(change.doc.id, data.content, data.cover, data.description, data.name, tags, data.url);
 
           this.projects.push(project);
           this.emit("new-project", project);

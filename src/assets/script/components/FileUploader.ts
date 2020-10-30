@@ -7,7 +7,7 @@ export type FileType = "image";
 export default class FileUploader {
   private _currentFile?: File;
 
-  public get currentFile (): File | undefined {
+  public get currentFile (): Readonly<File> | undefined {
     return this._currentFile;
   }
 
@@ -15,9 +15,9 @@ export default class FileUploader {
 
   private readonly inputEl: HTMLInputElement;
 
-  private readonly nameEl: Element;
+  private readonly nameEl?: Element | null;
 
-  public constructor (inputEl: HTMLInputElement, nameEl: Element, fileType?: FileType) {
+  public constructor (inputEl: HTMLInputElement, nameEl?: Element | null, fileType?: FileType) {
     this.fileType = fileType;
     this.inputEl = inputEl;
     this.nameEl = nameEl;
@@ -30,18 +30,23 @@ export default class FileUploader {
   }
 
   public upload (ref: storage.Reference | ((file: File) => storage.Reference)): storage.UploadTask {
-    if (!this.currentFile) throw new ValidationError("NoValue");
+    this.validate();
+
+    if (typeof ref === "function") {
+      // Can assert because of the call to `validate`
+      return ref(this.currentFile!).put(this.currentFile!);
+    }
+
+    return ref.put(this.currentFile!);
+  }
+
+  public validate (): void {
+    if (!this.currentFile) throw new ValidationError("NoValue", "File is required");
 
     // If uploader should validate field type and the type is wrong, throw error
     if (this.fileType && !this.currentFile.type.startsWith(this.fileType)) {
-      throw new ValidationError("InvalidFileFormat");
+      throw new ValidationError("InvalidFileFormat", `File must be ${this.fileType}`);
     }
-
-    if (typeof ref === "function") {
-      return ref(this.currentFile).put(this.currentFile);
-    }
-
-    return ref.put(this.currentFile);
   }
 
   private handleFileChange () {
@@ -50,7 +55,7 @@ export default class FileUploader {
     if (files && files.length > 0) {
       // Non-null assertion - we check length
       this._currentFile = files.item(0)!;
-      this.nameEl.textContent = this._currentFile.name;
+      if (this.nameEl) this.nameEl.textContent = this._currentFile.name;
     }
   }
 }

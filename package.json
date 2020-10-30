@@ -9,6 +9,7 @@
   "author": "Eirik Fossestøl Andresen <eiriand03@gmail.com>",
   "license": "ISC",
   "devDependencies": {
+    "@types/yup": "^0.29.8",
     "@typescript-eslint/eslint-plugin": "^4.3.0",
     "@typescript-eslint/parser": "^4.3.0",
     "eslint": "^7.10.0",
@@ -28,6 +29,7 @@
     "firebase": "^7.23.0",
     "firebaseui": "^4.6.1",
     "pell": "^1.0.6",
-    "tinymce": "^5.5.1"
+    "tinymce": "^5.5.1",
+    "yup": "^0.29.3"
   }
 }

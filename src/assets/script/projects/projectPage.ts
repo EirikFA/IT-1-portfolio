@@ -1,4 +1,5 @@
 import { db } from "../../../fb";
+import TagManager from "../tags/TagManager";
 import { ProjectManager } from "./ProjectManager";
 
 const container = document.getElementById("project");
@@ -8,7 +9,8 @@ if (container) {
   const id = query.get("id");
 
   if (id) {
-    const manager = new ProjectManager(db);
+    const tagManager = new TagManager(db);
+    const manager = new ProjectManager(db, tagManager);
     manager.load(id).then(project => {
       project.renderContent(container);
     });

@@ -1,7 +1,12 @@
 export interface ProjectData {
   content: string;
-  coverImage: string;
+  cover: string;
   description: string;
   name: string;
   url: string;
+  tags: string[];
+}
+
+export interface TagData {
+  name: string;
 }

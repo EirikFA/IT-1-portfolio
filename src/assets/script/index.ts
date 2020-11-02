@@ -24,7 +24,7 @@ if (container) {
 
   manager.on("new-project", project => {
     const cardContainer = document.createElement("div");
-    cardContainer.className = "column is-4";
+    cardContainer.className = "column is-6";
     container.appendChild(cardContainer);
 
     project.renderCard(cardContainer);

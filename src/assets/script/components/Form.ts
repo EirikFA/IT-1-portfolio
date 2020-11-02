@@ -4,7 +4,7 @@ import { FileUploader, TagsInput } from ".";
 import { FileType } from "./FileUploader";
 
 export type ValueTypes = {
-  [name: string]: typeof String | typeof FileUploader | typeof TagsInput;
+  [name: string]: typeof Date | typeof FileUploader | typeof String | typeof TagsInput;
 };
 
 export type FormValues<Types extends ValueTypes> = {
@@ -96,9 +96,10 @@ export default class Form<Schema extends ObjectSchema, V extends ValueTypes> {
     }
 
     try {
-      await this.schema.validate(values, { abortEarly: false });
+      // Yup casts some values for us (e. g. dates)
+      const castValues = await this.schema.validate(values, { abortEarly: false });
       // To avoid submitting if file handler has error (see above try/catch clause)
-      if (!hasError) this.submitCallback(values as FormValues<V>);
+      if (!hasError) this.submitCallback(castValues as FormValues<V>);
     } catch (e) {
       if (e.inner.length > 0) {
         for (const error of e.inner) {

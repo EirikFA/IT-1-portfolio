@@ -37,7 +37,17 @@ export class ProjectManager extends CustomEmitter {
     const doc = snapshot.docs[0];
     const data = doc.data();
     const tags = await this.tagManager.getMultiple(data.tags);
-    const project = new Project(doc.id, data.content, data.cover, data.description, data.name, tags, data.url);
+    const project = new Project(
+      doc.id,
+      data.content,
+      data.cover,
+      data.description,
+      data.name,
+      tags,
+      data.url,
+      data.developmentStart,
+      data.release
+    );
     this.projects.push(project);
 
     return project;
@@ -52,7 +62,17 @@ export class ProjectManager extends CustomEmitter {
           const data = change.doc.data();
           const tags = await this.tagManager.getMultiple(data.tags);
 
-          const project = new Project(change.doc.id, data.content, data.cover, data.description, data.name, tags, data.url);
+          const project = new Project(
+            change.doc.id,
+            data.content,
+            data.cover,
+            data.description,
+            data.name,
+            tags,
+            data.url,
+            data.developmentStart,
+            data.release
+          );
 
           this.projects.push(project);
           this.emit("new-project", project);

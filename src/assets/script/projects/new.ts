@@ -1,7 +1,7 @@
 import { storage as fbStorage, firestore } from "firebase";
 import { readFileSync } from "fs";
 import tinymce from "tinymce";
-import { object, string } from "yup";
+import { date, object, string } from "yup";
 
 import "tinymce/icons/default";
 import "tinymce/plugins/autoresize";
@@ -31,19 +31,25 @@ let projectRef: firestore.DocumentReference;
 
 // Files and tags not handled by Yup
 const newProjectSchema = object().shape({
-  name: string().required(),
+  content: string().required(),
   description: string().required(),
-  url: string().required().url(),
-  content: string().required()
+  // Input with date type is empty string if no value, thus the transform
+  developmentStart: date().notRequired().nullable().transform((curr, orig) => (orig === "" ? null : curr)),
+  name: string().required(),
+  // Same as above
+  release: date().notRequired().nullable().transform((curr, orig) => (orig === "" ? null : curr)),
+  url: string().required().url()
 });
 
 const inputTypes = {
-  name: String,
-  description: String,
+  content: String,
   cover: FileUploader,
-  url: String,
+  description: String,
+  developmentStart: Date,
+  name: String,
+  release: Date,
   tags: TagsInput,
-  content: String
+  url: String
 };
 
 const getErrorEl = (path: string): Element | null => {
@@ -123,10 +129,12 @@ auth.onAuthStateChanged(async user => {
       const data: Partial<ProjectData> = {};
 
       // TODO: Find different way to use string as a type (instead of using `String`)
-      data.name = values.name.toString();
-      data.description = values.description.toString();
-      data.url = values.url.toString();
       data.content = values.content.toString();
+      data.description = values.description.toString();
+      data.developmentStart = firestore.Timestamp.fromDate(values.developmentStart);
+      data.name = values.name.toString();
+      data.release = firestore.Timestamp.fromDate(values.release);
+      data.url = values.url.toString();
 
       const tagPromises: Promise<string>[] = values.tags.tags.map(tag => findOrCreateTag(tag.name));
       const tagsPromise = async () => {

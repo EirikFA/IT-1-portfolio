@@ -15,10 +15,6 @@ const templates: Template[] = [
     scripts: [import("./base/nav")]
   },
   {
-    containerId: "sidebar-container",
-    importPromise: import("./base/sidebar.html")
-  },
-  {
     containerId: "footer-container",
     importPromise: import("./base/footer.html")
   }

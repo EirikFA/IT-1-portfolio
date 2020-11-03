@@ -13,115 +13,117 @@
 <body>
   <div id="nav-container"></div>
 
-  <section class="section columns p-4">
-    <div id="sidebar-container" class="column is-2"></div>
+  <section class="section p-4">
+    <h1 class="title is-4 has-text-centered">New project</h1>
 
-    <div class="column is-centered">
-      <div id="loader">Loading..</div>
+    <h2 id="loader" class="subtitle has-text-centered">Loading form..</h2>
 
-      <form id="new-project-form" name="new-project" class="is-hidden">
-        <div class="columns">
-          <div class="column is-5">
-            <div class="field">
-              <label for="name" class="label">Name</label>
-              <div class="control">
-                <input name="name" type="text" class="input">
-              </div>
-
-              <p class="help is-danger"></p>
+    <form id="new-project-form" name="new-project" class="is-hidden">
+      <div class="columns is-centered">
+        <div class="column is-5">
+          <div class="field">
+            <label for="name" class="label">Name</label>
+            <div class="control">
+              <input name="name" type="text" class="input">
             </div>
 
-            <div class="field">
-              <label for="description" class="label">Short description</label>
-              <div class="control">
-                <textarea name="description" rows="4" class="textarea"></textarea>
-              </div>
+            <p class="help is-danger"></p>
+          </div>
 
-              <p class="help is-danger"></p>
+          <div class="field">
+            <label for="description" class="label">Short description</label>
+            <div class="control">
+              <textarea name="description" rows="4" class="textarea"></textarea>
             </div>
 
-            <div id="cover-image-field" class="field">
-              <label for="cover-image" class="label">Cover image</label>
+            <p class="help is-danger"></p>
+          </div>
 
-              <div class="file is-info has-name is-fullwidth">
-                <label class="file-label">
-                  <input name="cover" id="cover-image-input" class="file-input" type="file" accept="image/*"
-                    data-file-type="image">
+          <div id="cover-image-field" class="field">
+            <label for="cover-image" class="label">Cover image</label>
 
-                  <span class="file-cta">
-                    <span class="file-icon">
-                      <i class="fas fa-upload"></i>
-                    </span>
-                    <span class="file-label">
-                      Choose an image
-                    </span>
+            <div class="file is-info has-name is-fullwidth">
+              <label class="file-label">
+                <input name="cover" id="cover-image-input" class="file-input" type="file" accept="image/*"
+                  data-file-type="image">
+
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <i class="fas fa-upload"></i>
                   </span>
-                  <span class="file-name">
-                    Image file
+                  <span class="file-label">
+                    Choose an image
                   </span>
-                </label>
-              </div>
-
-              <p class="help is-danger"></p>
+                </span>
+                <span class="file-name">
+                  Image file
+                </span>
+              </label>
             </div>
 
-            <div class="field">
-              <label for="url" class="label">Site URL</label>
-              <div class="control">
-                <input name="url" type="url" class="input">
-              </div>
-
-              <p class="help is-danger"></p>
-            </div>
-
-            <div class="field">
-              <label for="developmentStart" class="label">Development started</label>
-              <div class="control">
-                <input name="developmentStart" type="date" class="input">
-              </div>
-
-              <p class="help is-danger"></p>
-            </div>
-
-            <div class="field">
-              <label for="release" class="label">First release</label>
-              <div class="control">
-                <input name="release" type="date" class="input">
-              </div>
-
-              <p class="help is-danger"></p>
-            </div>
-
-            <div class="field">
-              <label for="tags" class="label">Tags</label>
-              <div class="control">
-                <div id="tags-input-container" class="input">
-                  <input name="tags" type="text" class="input is-static tags-input">
-                </div>
-              </div>
-
-              <p class="help is-danger"></p>
-            </div>
-          </div>
-        </div>
-
-        <div class="field">
-          <label class="label">Project body</label>
-
-          <div class="control">
-            <textarea name="content" id="tinymce-editor"></textarea>
+            <p class="help is-danger"></p>
           </div>
 
-          <p class="help is-danger"></p>
-        </div>
+          <div class="field">
+            <label for="url" class="label">Site URL</label>
+            <div class="control">
+              <input name="url" type="url" class="input">
+            </div>
 
-        <div class="field">
-          <div class="control">
-            <button id="new-project-submit-btn" class="button is-link">Create project</button>
+            <p class="help is-danger"></p>
+          </div>
+
+          <div class="field">
+            <label for="developmentStart" class="label">Development started</label>
+            <div class="control">
+              <input name="developmentStart" type="date" class="input">
+            </div>
+
+            <p class="help is-danger"></p>
+          </div>
+
+          <div class="field">
+            <label for="release" class="label">First release</label>
+            <div class="control">
+              <input name="release" type="date" class="input">
+            </div>
+
+            <p class="help is-danger"></p>
+          </div>
+
+          <div class="field">
+            <label for="tags" class="label">Tags</label>
+            <div class="control">
+              <div id="tags-input-container" class="input">
+                <input name="tags" type="text" class="input is-static tags-input">
+              </div>
+            </div>
+
+            <p class="help is-danger"></p>
           </div>
         </div>
-      </form>
-    </div>
+      </div>
+
+      <div class="columns is-centered">
+        <div class="column is-10">
+          <div class="field">
+            <label class="label">Project body</label>
+
+            <div class="control">
+              <textarea name="content" id="tinymce-editor"></textarea>
+            </div>
+
+            <p class="help is-danger"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="field has-text-centered">
+        <div class="control">
+          <button id="new-project-submit-btn" class="button is-link">Create project</button>
+        </div>
+      </div>
+    </form>
   </section>
 
   <div id="footer-container"></div>

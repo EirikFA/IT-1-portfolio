@@ -1,4 +1,4 @@
-import { storage as fbStorage, firestore } from "firebase";
+import { storage as fbStorage, firestore } from "firebase/app";
 import { readFileSync } from "fs";
 import tinymce from "tinymce";
 import { date, object, string } from "yup";

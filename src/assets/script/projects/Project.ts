@@ -5,6 +5,8 @@ import Tag from "../tags/Tag";
 export default class Project {
   public readonly id: string;
 
+  public readonly tags: Tag[];
+
   private readonly content: string;
 
   private readonly cover: string;
@@ -16,8 +18,6 @@ export default class Project {
   private readonly name: string;
 
   private readonly release?: firestore.Timestamp;
-
-  private readonly tags: Tag[];
 
   private readonly url: string;
 
@@ -43,9 +43,8 @@ export default class Project {
     this.url = url;
   }
 
-  public createCard (elementId: string): HTMLDivElement {
+  public createCard (): HTMLDivElement {
     const card = document.createElement("div");
-    card.id = elementId;
     card.className = "card";
 
     // Image
@@ -124,13 +123,8 @@ export default class Project {
     return card;
   }
 
-  public removeCard (): void {
-    const card = document.getElementById(`project-${this.id}`);
-    card?.remove();
-  }
-
   public renderCard (container: HTMLElement): void {
-    container.appendChild(this.createCard(`project-${this.id}`));
+    container.appendChild(this.createCard());
   }
 
   public renderContent (container: HTMLElement): void {

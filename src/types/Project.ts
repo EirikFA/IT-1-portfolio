@@ -6,6 +6,7 @@ export interface ProjectData {
   description: string;
   developmentStart?: firestore.Timestamp;
   name: string;
+  priority: number;
   release?: firestore.Timestamp;
   url: string;
   tags: string[];

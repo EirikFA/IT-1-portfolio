@@ -1,7 +1,9 @@
 import { storage as fbStorage, firestore } from "firebase/app";
 import { readFileSync } from "fs";
 import tinymce from "tinymce";
-import { date, object, string } from "yup";
+import {
+  date, number, object, string
+} from "yup";
 
 import "tinymce/icons/default";
 import "tinymce/plugins/autoresize";
@@ -36,6 +38,8 @@ const newProjectSchema = object().shape({
   // Input with date type is empty string if no value, thus the transform
   developmentStart: date().notRequired().nullable().transform((curr, orig) => (orig === "" ? null : curr)),
   name: string().required(),
+  priority: number().required().integer().min(0)
+    .default(0),
   // Same as above
   release: date().notRequired().nullable().transform((curr, orig) => (orig === "" ? null : curr)),
   url: string().required().url()
@@ -47,6 +51,7 @@ const inputTypes = {
   description: String,
   developmentStart: Date,
   name: String,
+  priority: Number,
   release: Date,
   tags: TagsInput,
   url: String
@@ -133,6 +138,7 @@ auth.onAuthStateChanged(async user => {
       data.description = values.description.toString();
       data.developmentStart = firestore.Timestamp.fromDate(values.developmentStart);
       data.name = values.name.toString();
+      data.priority = Number(values.priority);
       data.release = firestore.Timestamp.fromDate(values.release);
       data.url = values.url.toString();
 

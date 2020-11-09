@@ -4,7 +4,7 @@ import { FileUploader, TagsInput } from ".";
 import { FileType } from "./FileUploader";
 
 export type ValueTypes = {
-  [name: string]: typeof Date | typeof FileUploader | typeof String | typeof TagsInput;
+  [name: string]: typeof Date | typeof FileUploader | typeof Number | typeof String | typeof TagsInput;
 };
 
 export type FormValues<Types extends ValueTypes> = {

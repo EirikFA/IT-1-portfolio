@@ -15,12 +15,29 @@ export default class TagsInput {
     return this._tags;
   }
 
-  public constructor (inputEl: HTMLInputElement, tagContainer: HTMLElement) {
+  public constructor (inputEl: HTMLInputElement, tagContainer: HTMLElement, initialTags: SimpleTag[] = []) {
     this.inputEl = inputEl;
     this.tagContainer = tagContainer;
     this._tags = [];
 
+    initialTags.forEach(this.addTag.bind(this));
+
     this.inputEl.addEventListener("keypress", this.handleKeyPress.bind(this));
+  }
+
+  private addTag (tag: SimpleTag): void {
+    this._tags.push(tag);
+
+    const tagEl = document.createElement("span");
+    tagEl.className = "tag mr-1";
+    tagEl.textContent = tag.name;
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "delete is-small";
+    deleteBtn.addEventListener("click", () => this.removeTag(name, tagEl));
+    tagEl.appendChild(deleteBtn);
+
+    this.tagContainer.insertBefore(tagEl, this.inputEl);
   }
 
   private handleKeyPress (event: KeyboardEvent): void {
@@ -28,19 +45,8 @@ export default class TagsInput {
 
     if (event.key === "," && tagName !== "") {
       event.preventDefault();
-      this._tags.push({ name: tagName });
+      this.addTag({ name: tagName });
       this.inputEl.value = "";
-
-      const tagEl = document.createElement("span");
-      tagEl.className = "tag mr-1";
-      tagEl.textContent = tagName;
-
-      const deleteBtn = document.createElement("button");
-      deleteBtn.className = "delete is-small";
-      deleteBtn.addEventListener("click", () => this.removeTag(tagName, tagEl));
-      tagEl.appendChild(deleteBtn);
-
-      this.tagContainer.insertBefore(tagEl, this.inputEl);
     } else if (!TAG_REGEX.test(event.key)) event.preventDefault();
   }
 

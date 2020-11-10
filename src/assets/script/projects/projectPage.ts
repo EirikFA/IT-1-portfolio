@@ -12,7 +12,8 @@ if (container) {
     const tagManager = new TagManager(db);
     const manager = new ProjectManager(db, tagManager);
     manager.load(id).then(project => {
-      project.renderContent(container);
+      if (project) project.renderContent(container);
+      // TODO: Render "not found"
     });
   }
 }

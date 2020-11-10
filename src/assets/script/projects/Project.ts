@@ -3,25 +3,27 @@ import { firestore } from "firebase/app";
 import Tag from "../tags/Tag";
 
 export default class Project {
+  public readonly content: string;
+
+  public readonly cover: string;
+
+  public readonly description: string;
+
   public readonly developmentStart?: firestore.Timestamp;
 
   public readonly id: string;
+
+  public readonly name: string;
 
   public readonly priority: number;
 
   public readonly release?: firestore.Timestamp;
 
+  public readonly ref: firestore.DocumentReference;
+
   public readonly tags: Tag[];
 
-  private readonly content: string;
-
-  private readonly cover: string;
-
-  private readonly description: string;
-
-  private readonly name: string;
-
-  private readonly url: string;
+  public readonly url: string;
 
   public constructor (
     id: string,
@@ -30,6 +32,7 @@ export default class Project {
     description: string,
     name: string,
     priority: number,
+    ref: firestore.DocumentReference,
     tags: Tag[],
     url: string,
     developmentStart?: firestore.Timestamp,
@@ -43,6 +46,7 @@ export default class Project {
     this.name = name;
     this.priority = priority;
     this.release = release;
+    this.ref = ref;
     this.tags = tags;
     this.url = url;
   }

@@ -120,7 +120,6 @@ if (container) {
                   return 0;
                 });
 
-                console.log(allProjects);
                 removeAllProjects(allProjects);
                 renderAllProjects(allProjects);
               }

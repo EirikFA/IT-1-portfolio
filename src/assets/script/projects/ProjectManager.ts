@@ -31,8 +31,10 @@ export class ProjectManager extends CustomEmitter {
     this.projectCollection.onSnapshot(this.snapshotHandler.bind(this));
   }
 
-  public async load (id: string): Promise<Project> {
+  public async load (id: string): Promise<Project | undefined> {
     const snapshot = await this.projectCollection.where("id", "==", id).get();
+
+    if (snapshot.docs.length === 0) return undefined;
 
     const doc = snapshot.docs[0];
     const data = doc.data();
@@ -44,6 +46,7 @@ export class ProjectManager extends CustomEmitter {
       data.description,
       data.name,
       data.priority,
+      doc.ref,
       tags,
       data.url,
       data.developmentStart,
@@ -70,6 +73,7 @@ export class ProjectManager extends CustomEmitter {
             data.description,
             data.name,
             data.priority,
+            change.doc.ref,
             tags,
             data.url,
             data.developmentStart,

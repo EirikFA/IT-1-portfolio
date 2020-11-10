@@ -17,10 +17,13 @@ export default class FileUploader {
 
   private readonly nameEl?: Element | null;
 
-  public constructor (inputEl: HTMLInputElement, nameEl?: Element | null, fileType?: FileType) {
+  private readonly optional: boolean;
+
+  public constructor (inputEl: HTMLInputElement, fileType?: FileType, nameEl?: Element | null, optional: boolean = false) {
     this.fileType = fileType;
     this.inputEl = inputEl;
     this.nameEl = nameEl;
+    this.optional = optional;
 
     this.inputEl.addEventListener("change", this.handleFileChange.bind(this));
   }
@@ -29,7 +32,9 @@ export default class FileUploader {
     this.inputEl.removeEventListener("change", this.handleFileChange.bind(this));
   }
 
-  public upload (ref: storage.Reference | ((file: File) => storage.Reference)): storage.UploadTask {
+  public upload (ref: storage.Reference | ((file: File) => storage.Reference)): storage.UploadTask | undefined {
+    if (!this.currentFile && this.optional) return undefined;
+
     this.validate();
 
     if (typeof ref === "function") {
@@ -41,10 +46,10 @@ export default class FileUploader {
   }
 
   public validate (): void {
-    if (!this.currentFile) throw new ValidationError("NoValue", "File is required");
+    if (!this.currentFile && !this.optional) throw new ValidationError("NoValue", "File is required");
 
-    // If uploader should validate field type and the type is wrong, throw error
-    if (this.fileType && !this.currentFile.type.startsWith(this.fileType)) {
+    // If uploader should validate field type and the type is wrong (and a file has been chosen), throw error
+    if (this.fileType && this.currentFile && !this.currentFile.type.startsWith(this.fileType)) {
       throw new ValidationError("InvalidFileFormat", `File must be ${this.fileType}`);
     }
   }

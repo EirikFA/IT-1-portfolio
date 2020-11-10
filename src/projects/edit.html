@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>New project</title>
+  <title>Edit project</title>
 
-  <link rel="stylesheet" href="../assets/style/projects/new.scss">
+  <link rel="stylesheet" href="../assets/style/projects/edit.scss">
   <link rel="stylesheet" href="../../node_modules/@fortawesome/fontawesome-free/css/all.css">
 </head>
 
@@ -14,11 +14,11 @@
   <div id="nav-container"></div>
 
   <section class="section p-4">
-    <h1 class="title is-4 has-text-centered">New project</h1>
+    <h1 class="title is-4 has-text-centered">Edit project</h1>
 
     <h2 id="loader" class="subtitle has-text-centered">Loading form..</h2>
 
-    <form id="new-project-form" name="new-project" class="is-hidden">
+    <form id="edit-project-form" name="edit-project" class="is-hidden">
       <div class="columns is-centered">
         <div class="column is-5">
           <div class="field">
@@ -55,7 +55,7 @@
                   </span>
                 </span>
                 <span class="file-name">
-                  Image file
+                  New cover image
                 </span>
               </label>
             </div>
@@ -102,7 +102,7 @@
           <div class="field">
             <label for="tags" class="label">Tags</label>
             <div class="control">
-              <div class="input">
+              <div id="tags-input-container" class="input">
                 <input name="tags" type="text" class="input is-static tags-input">
               </div>
             </div>
@@ -128,7 +128,7 @@
 
       <div class="field has-text-centered">
         <div class="control">
-          <button id="new-project-submit-btn" class="button is-link">Create project</button>
+          <button id="edit-project-submit-btn" class="button is-link">Edit project</button>
         </div>
       </div>
     </form>
@@ -137,7 +137,7 @@
   <div id="footer-container"></div>
 
   <script src="../template/loader.ts"></script>
-  <script src="../assets/script/projects/new.ts"></script>
+  <script src="../assets/script/projects/edit.ts"></script>
   <script src="../../node_modules/@fortawesome/fontawesome-free/js/all.js"></script>
 </body>
 

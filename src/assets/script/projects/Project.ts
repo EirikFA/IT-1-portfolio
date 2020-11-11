@@ -17,9 +17,9 @@ export default class Project {
 
   public readonly priority: number;
 
-  public readonly release?: firestore.Timestamp;
-
   public readonly ref: firestore.DocumentReference;
+
+  public readonly release?: firestore.Timestamp;
 
   public readonly tags: Tag[];
 
@@ -131,11 +131,15 @@ export default class Project {
     return card;
   }
 
+  public getPermURL (): string {
+    return `/projects/project.html?id=${this.id}`;
+  }
+
   public renderCard (container: HTMLElement): void {
     container.appendChild(this.createCard());
   }
 
-  public renderContent (container: HTMLElement): void {
+  public renderContent (container: HTMLElement, showManagement: boolean = false): void {
     const title = document.createElement("h3");
     title.className = "title is-3";
     title.textContent = this.name;
@@ -228,9 +232,56 @@ export default class Project {
       tagEl.textContent = t.name;
       tagsContainer.appendChild(tagEl);
     });
+
+    if (showManagement) {
+      const field = document.createElement("div");
+      field.className = "field has-addons";
+      side.appendChild(field);
+
+      const editControl = document.createElement("div");
+      editControl.className = "control";
+      field.appendChild(editControl);
+
+      const editAnchor = document.createElement("a");
+      editAnchor.href = this.getEditURL();
+      editAnchor.className = "button is-info";
+      editControl.appendChild(editAnchor);
+
+      const editIconContainer = document.createElement("span");
+      editIconContainer.className = "icon is-small";
+      editAnchor.appendChild(editIconContainer);
+
+      const editIcon = document.createElement("i");
+      editIcon.className = "fas fa-edit";
+      editIconContainer.appendChild(editIcon);
+
+      const editText = document.createElement("span");
+      editText.textContent = "Edit";
+      editAnchor.appendChild(editText);
+
+      const deleteControl = document.createElement("div");
+      deleteControl.className = "control";
+      field.appendChild(deleteControl);
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.className = "button is-danger";
+      deleteControl.appendChild(deleteBtn);
+
+      const deleteIconContainer = document.createElement("span");
+      deleteIconContainer.className = "icon is-small";
+      deleteBtn.appendChild(deleteIconContainer);
+
+      const deleteIcon = document.createElement("i");
+      deleteIcon.className = "fas fa-trash-alt";
+      deleteIconContainer.appendChild(deleteIcon);
+
+      const deleteText = document.createElement("span");
+      deleteText.textContent = "Delete";
+      deleteBtn.appendChild(deleteText);
+    }
   }
 
-  private getPermURL (): string {
-    return `/projects/project.html?id=${this.id}`;
+  private getEditURL (): string {
+    return `/projects/edit.html?id=${this.id}`;
   }
 }

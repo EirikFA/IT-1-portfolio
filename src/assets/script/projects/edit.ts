@@ -72,7 +72,7 @@ const handleSubmit = async (project: Project, values: FormValues<typeof projectI
 
   await project.ref.set({ ...data }, { merge: true });
 
-  location.replace("/");
+  location.replace(project.getPermURL());
 };
 
 const setupForm = async (project: Project): Promise<void> => {

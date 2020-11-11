@@ -1,4 +1,4 @@
-import { db } from "../../../fb";
+import { auth, db } from "../../../fb";
 import TagManager from "../tags/TagManager";
 import { ProjectManager } from "./ProjectManager";
 
@@ -12,8 +12,13 @@ if (container) {
     const tagManager = new TagManager(db);
     const manager = new ProjectManager(db, tagManager);
     manager.load(id).then(project => {
-      if (project) project.renderContent(container);
-      // TODO: Render "not found"
+      auth.onAuthStateChanged(async user => {
+        if (project) {
+          const tokenResult = await user?.getIdTokenResult();
+          project.renderContent(container, tokenResult && tokenResult.claims.editor === true);
+        }
+        // TODO: Render "not found"
+      });
     });
   }
 }

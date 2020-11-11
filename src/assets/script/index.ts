@@ -23,6 +23,29 @@ const container = document.getElementById("projects");
 const orderFieldList = document.getElementById("order-field-list");
 const tagFilterList = document.getElementById("tag-filter-list");
 
+const sortProjects = (field: keyof ProjectData, order: string, a: Project, b: Project) => {
+  const aVal = a[field];
+  const bVal = b[field];
+
+  let aParsed: number;
+  let bParsed: number;
+
+  if (typeof aVal === "number" && typeof bVal === "number") {
+    aParsed = aVal;
+    bParsed = bVal;
+  } else if (aVal instanceof firestore.Timestamp && bVal instanceof firestore.Timestamp) {
+    aParsed = aVal.toMillis();
+    bParsed = bVal.toMillis();
+  // Put undefined/nulls last
+  } else if (aVal && !bVal) return -1;
+  else if (!aVal && bVal) return 1;
+  else return 0;
+
+  if (aParsed > bParsed) return order === "desc" ? -1 : 1;
+  if (aParsed < bParsed) return order === "desc" ? 1 : -1;
+  return 0;
+};
+
 if (container) {
   const renderProject = (project: Project): void => {
     const id = `project-${project.id}`;
@@ -70,59 +93,36 @@ if (container) {
 
     manager.listen();
 
-    let currentSort: { field: string | null, order: string | null } = {
-      field: null,
-      order: null
+    let currentSort = {
+      field: "priority",
+      order: "desc"
     };
-    let currentSortAnchor: HTMLElement | null | undefined;
+    let currentSortAnchor = document.getElementById("default-sort");
 
     if (orderFieldList) {
       orderFieldList.childNodes.forEach(fieldItem => {
         if (fieldItem instanceof HTMLElement) {
           fieldItem.addEventListener("click", () => {
             const { field, order } = fieldItem.dataset;
-            if (field && order) {
-              // If data attributes exist and either changed
-              if (field && order && (field !== currentSort.field || order !== currentSort.order)) {
-                currentSort = {
-                  field,
-                  order
-                };
+            // If data attributes exist and either changed
+            if (field && order && (field !== currentSort.field || order !== currentSort.order)) {
+              currentSort = {
+                field,
+                order
+              };
 
-                if (currentSortAnchor) currentSortAnchor.classList.toggle("is-active");
+              if (currentSortAnchor) currentSortAnchor.classList.toggle("is-active");
 
-                const anchor = fieldItem.querySelector("a");
-                currentSortAnchor = anchor;
-                if (anchor) {
-                  anchor.classList.toggle("is-active");
-                }
-
-                allProjects.sort((a, b) => {
-                  const aVal = a[field as keyof ProjectData];
-                  const bVal = b[field as keyof ProjectData];
-
-                  let aParsed: number;
-                  let bParsed: number;
-
-                  if (typeof aVal === "number" && typeof bVal === "number") {
-                    aParsed = aVal;
-                    bParsed = bVal;
-                  } else if (aVal instanceof firestore.Timestamp && bVal instanceof firestore.Timestamp) {
-                    aParsed = aVal.toMillis();
-                    bParsed = bVal.toMillis();
-                  // Put undefined/nulls last
-                  } else if (aVal && !bVal) return -1;
-                  else if (!aVal && bVal) return 1;
-                  else return 0;
-
-                  if (aParsed > bParsed) return order === "desc" ? -1 : 1;
-                  if (aParsed < bParsed) return order === "desc" ? 1 : -1;
-                  return 0;
-                });
-
-                removeAllProjects(allProjects);
-                renderAllProjects(allProjects);
+              const anchor = fieldItem.querySelector("a");
+              currentSortAnchor = anchor;
+              if (anchor) {
+                anchor.classList.toggle("is-active");
               }
+
+              allProjects.sort((a, b) => sortProjects(field as keyof ProjectData, order, a, b));
+
+              removeAllProjects(allProjects);
+              renderAllProjects(allProjects);
             }
           });
         }

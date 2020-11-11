@@ -34,7 +34,7 @@ export class ProjectManager extends CustomEmitter {
   }
 
   public listen (): void {
-    this.projectCollection.onSnapshot(this.snapshotHandler.bind(this));
+    this.projectCollection.orderBy("priority", "desc").onSnapshot(this.snapshotHandler.bind(this));
   }
 
   public async load (id: string): Promise<Project | undefined> {

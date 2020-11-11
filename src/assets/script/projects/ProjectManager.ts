@@ -27,6 +27,12 @@ export class ProjectManager extends CustomEmitter {
     this.tagManager = tagManager;
   }
 
+  public async delete (project: Project): Promise<void> {
+    await project.ref.delete();
+    const i = this.projects.findIndex(p => p.id === project.id);
+    if (i >= 0) this.projects.splice(i, 1);
+  }
+
   public listen (): void {
     this.projectCollection.onSnapshot(this.snapshotHandler.bind(this));
   }

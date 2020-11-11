@@ -139,7 +139,7 @@ export default class Project {
     container.appendChild(this.createCard());
   }
 
-  public renderContent (container: HTMLElement, showManagement: boolean = false): void {
+  public renderContent (container: HTMLElement, showManagement: boolean = false, deleteHandler?: (project: Project) => any): void {
     const title = document.createElement("h3");
     title.className = "title is-3";
     title.textContent = this.name;
@@ -265,6 +265,9 @@ export default class Project {
 
       const deleteBtn = document.createElement("button");
       deleteBtn.className = "button is-danger";
+      if (deleteHandler) {
+        deleteBtn.addEventListener("click", () => deleteHandler(this));
+      }
       deleteControl.appendChild(deleteBtn);
 
       const deleteIconContainer = document.createElement("span");

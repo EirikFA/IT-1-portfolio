@@ -53,7 +53,7 @@ if (container) {
 
     const cardContainer = document.createElement("div");
     cardContainer.id = `project-${project.id}`;
-    cardContainer.className = "column is-6";
+    cardContainer.className = "column is-12 is-6-desktop";
     container.appendChild(cardContainer);
 
     project.renderCard(cardContainer);
